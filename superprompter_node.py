@@ -15,18 +15,19 @@ class SuperPrompterNode:
             "required": {
                 "prompt": ("STRING", {"default": "Enter prompt here"}),
                 "max_new_tokens": ("INT", {"default": 512, "min": 1, "max": 2048}),
-                "repetition_penalty": ("FLOAT", {"default": 1.2, "min": 0.0, "max": 2.0, "step": 0.1})
+                "repetition_penalty": ("FLOAT", {"default": 1.2, "min": 0.0, "max": 2.0, "step": 0.1}),
+                "remove_incomplete_sentences": ("BOOLEAN", {"default": True}),
             },
         }
 
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("generated_text",)
     FUNCTION = "generate_text"
-    CATEGORY = "text"		
-    
-    def remove_incomplete_sentence(paragraph):
-        return re.sub(r'((?:[^.!?](?![.!?]))*+[^.!?\s][^.!?]*$)', '', paragraph.rstrip())
-    
+    CATEGORY = "text"
+
+    def remove_incomplete_sentence(self, paragraph):
+        return re.sub(r'((?:\[^.!?\](?!\[.!?\]))\*+\[^.!?\\s\]\[^.!?\]\*$)', '', paragraph.rstrip())
+
     def download_models(self):
         model_name = "roborovski/superprompt-v1"
         self.tokenizer = T5Tokenizer.from_pretrained(model_name)
@@ -46,21 +47,25 @@ class SuperPrompterNode:
         self.model = T5ForConditionalGeneration.from_pretrained(self.modelDir, torch_dtype=torch.float16)
         print("SuperPrompt-v1 model loaded successfully.")
 
-    def generate_text(self, prompt, max_new_tokens, repetition_penalty):
+    def generate_text(self, prompt, max_new_tokens, repetition_penalty, remove_incomplete_sentences):
         if self.tokenizer is None or self.model is None:
             self.load_models()
+
         seed = 1
         torch.manual_seed(seed)
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        
         systemprompt = "Expand the following prompt to add more detail:"
         input_ids = self.tokenizer(systemprompt + prompt, return_tensors="pt").input_ids.to(device)
         if torch.cuda.is_available():
             self.model.to('cuda')
-        
+
         outputs = self.model.generate(input_ids, max_new_tokens=max_new_tokens, repetition_penalty=repetition_penalty,
                                       do_sample=True)
 
         dirty_text = self.tokenizer.decode(outputs[0])
-        text = remove_incomplete_sentence(dirty_text.replace("<pad>", "").replace("</s>", "").strip())
+        text = dirty_text.replace("<pad>", "").replace("</s>", "").strip()
+        
+        if remove_incomplete_sentences:
+            text = self.remove_incomplete_sentence(text)
+        
         return (text,)
