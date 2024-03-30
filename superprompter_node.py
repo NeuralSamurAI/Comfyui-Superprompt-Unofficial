@@ -1,5 +1,6 @@
 import os
 import torch
+import re
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 class SuperPrompterNode:
@@ -22,7 +23,10 @@ class SuperPrompterNode:
     RETURN_NAMES = ("generated_text",)
     FUNCTION = "generate_text"
     CATEGORY = "text"		
-
+    
+    def remove_incomplete_sentence(paragraph):
+        return re.sub(r'((?:[^.!?](?![.!?]))*+[^.!?\s][^.!?]*$)', '', paragraph.rstrip())
+    
     def download_models(self):
         model_name = "roborovski/superprompt-v1"
         self.tokenizer = T5Tokenizer.from_pretrained(model_name)
@@ -58,5 +62,5 @@ class SuperPrompterNode:
                                       do_sample=True)
 
         dirty_text = self.tokenizer.decode(outputs[0])
-        text = dirty_text.replace("<pad>", "").replace("</s>", "").strip()
+        text = remove_incomplete_sentence(dirty_text.replace("<pad>", "").replace("</s>", "").strip())
         return (text,)
