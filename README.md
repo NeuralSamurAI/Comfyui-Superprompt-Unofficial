@@ -17,15 +17,12 @@ Usage
     prompt: The prompt or starting text for generating the text.
     max_new_tokens: The maximum number of new tokens to generate.
     repetition_penalty: The penalty for repeating tokens in the generated text.
-    temperature: The temperature value for controlling the randomness of the generated text.
-    top_p: The cumulative probability threshold for top-p sampling.
-    top_k: The number of top tokens to consider for top-k sampling.
-    seed: The random seed for reproducibility. Set to 0 for random seed.
+
 5. Connect the SuperPrompter node to other nodes in your workflow as needed.
 6. Execute the workflow to generate text based on the provided prompt and parameters.
 
 Model
-The SuperPrompter node uses the SuperPrompt-v1 model from Hugging Face. The model files will be automatically downloaded and saved in the ~/.superprompter/model_files directory when the node is first used.
+The SuperPrompter node uses the SuperPrompt-v1 model from Hugging Face. The model files will be automatically downloaded and saved in the ~/.models directory when the node is first used.
 
 License
 This node is released under the MIT License.
