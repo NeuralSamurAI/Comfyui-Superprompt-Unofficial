@@ -4,7 +4,7 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 class SuperPrompterNode:
     def __init__(self):
-        self.modelDir = os.path.expanduser("~") + "/.roborovski/superprompt-v1"
+        self.modelDir = os.path.expanduser("~") + "/.models"
         self.tokenizer = None
         self.model = None
 
