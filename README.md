@@ -1,4 +1,5 @@
 SuperPrompter Node for ComfyUI
+![image](https://github.com/NeuralSamurAI/Comfyui-Superprompt-Unofficial/blob/main/assets/example.png?raw=true)
 
 The SuperPrompter node is a ComfyUI node that uses the SuperPrompt-v1 model from Hugging Face to generate text based on a given prompt. It provides various parameters to control the text generation process.
 
