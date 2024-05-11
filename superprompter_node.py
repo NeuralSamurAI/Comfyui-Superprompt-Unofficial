@@ -26,8 +26,8 @@ class SuperPrompterNode:
     CATEGORY = "text"
 
     def remove_incomplete_sentence(self, paragraph):
-        return re.sub(r'((?:\[^.!?\](?!\[.!?\]))\*+\[^.!?\\s\]\[^.!?\]\*$)', '', paragraph.rstrip())
-
+        return re.sub(r"((?:[^.!?](?![.!?]))[^.!?\s][^.!?]+$)", '', paragraph.rstrip())
+        
     def download_models(self):
         model_name = "roborovski/superprompt-v1"
         self.tokenizer = T5Tokenizer.from_pretrained(model_name)
