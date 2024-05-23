@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-superprompt-unofficial"
+description = "The SuperPrompter node is a ComfyUI node that uses the SuperPrompt-v1 model from Hugging Face to generate text based on a given prompt. It provides various parameters to control the text generation process."
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["torch", "transformers"]
+
+[project.urls]
+Repository = "https://github.com/NeuralSamurAI/Comfyui-Superprompt-Unofficial"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "Comfyui-Superprompt-Unofficial"
+Icon = ""
